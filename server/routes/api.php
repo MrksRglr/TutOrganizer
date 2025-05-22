@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\OfferController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -24,3 +25,9 @@ Route::get('/courses/{code}', [CourseController::class, 'getCourseByCode']);
 Route::post('/courses', [CourseController::class, 'saveCourse']);
 Route::put('/courses/{code}', [CourseController::class, 'updateCourse']);
 Route::delete('/courses/{code}', [CourseController::class, 'deleteCourse']);
+
+Route::get('/offers', [OfferController::class, 'index']);
+Route::get('/offers/{id}', [OfferController::class, 'getOfferById']);
+Route::post('/offers', [OfferController::class, 'saveOffer']);
+Route::put('/offers/{id}', [OfferController::class, 'updateOffer']);
+Route::delete('/offers/{id}', [OfferController::class, 'deleteOffer']);

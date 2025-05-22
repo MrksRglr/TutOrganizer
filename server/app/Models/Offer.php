@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Offer extends Model
 {
-    protected $fillable = ['course', 'user', 'description'];
+    protected $fillable = ['course_id', 'user_id', 'description'];
 
     public function user() : BelongsTo {
         return $this->belongsTo(User::class);
