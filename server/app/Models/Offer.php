@@ -18,6 +18,10 @@ class Offer extends Model
         return $this->belongsTo(Course::class);
     }
 
+    public function inquiries() : HasMany {
+        return $this->hasMany(Inquiry::class);
+    }
+
     public function sessions() : HasMany {
         return $this->hasMany(Session::class);
     }

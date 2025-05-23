@@ -52,7 +52,7 @@ class User extends Authenticatable
     }
 
     public function requests() : hasMany {
-        return $this->hasMany (Request::class);
+        return $this->hasMany (Inquiry::class);
     }
 
     public function proposedSessions() : hasMany {

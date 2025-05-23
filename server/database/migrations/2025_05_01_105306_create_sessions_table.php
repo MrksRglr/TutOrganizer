@@ -15,19 +15,10 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->foreignId('offer_id')->constrained()->onDelete('cascade');;
-            $table->unsignedBigInteger('proposed_by');
-            $table
-                ->foreign('proposed_by')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-            $table->unsignedBigInteger('accepted_by')->nullable();
-            $table
-                ->foreign('accepted_by')
-                ->references('id')
-                ->on('users')
-                ->onDelete('cascade');
-            $table->enum('status', ['proposed', 'accepted', 'rejected']);
+            $table->foreignId('inquiry_id')->constrained()->onDelete('cascade');
+            $table->foreignId('proposed_by')->constrained('users')->onDelete('cascade');
+            $table->foreignId('accepted_by')->constrained('users')->onDelete('cascade');
+            $table->enum('status', ['proposed', 'accepted', 'rejected'])->default('proposed');
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->text('comment')->nullable();

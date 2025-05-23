@@ -53,13 +53,13 @@ class CourseController extends Controller
         }
     }
 
-    public function deleteCourse(Request $request, string $code) : JsonResponse {
+    public function deleteCourse(string $code) : JsonResponse {
         $course = Course::where('code', $code)->first();
         if ($course != null) {
             $course->delete();
-            return response()->json("Kurs '$code' wurde gelöscht.", 200);
+            return response()->json("Kurs '$code, $course->name' wurde gelöscht.", 200);
         } else {
-            return response()->json(["Kurs mit Code '$code' konnte nicht gefunden werden."], 404);
+            return response()->json(["Kurs '$course->name' mit Code '$code' konnte nicht gefunden werden."], 404);
         }
     }
 }

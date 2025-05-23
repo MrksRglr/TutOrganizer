@@ -30,14 +30,14 @@ class OfferController extends Controller
         }
         catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(["Angebot konnte nicht erstellt werden." . $e->getMessage()], 500);
+            return response()->json(["Angebot konnte nicht erstellt werden. " . $e->getMessage()], 500);
         }
     }
 
     public function updateOffer(Request $request, int $id) : JsonResponse {
         DB::beginTransaction();
         try {
-            $offer = Offer::with('course_id', 'user_id')->where('id', $id)->first();
+            $offer = Offer::where('id', $id)->select('course_id', 'user_id')->first();
             if ($offer != null) {
                 $offer->update($request->all());
                 $offer->save();
@@ -53,7 +53,7 @@ class OfferController extends Controller
         }
     }
 
-    public function deleteOffer(Request $request, int $id) : JsonResponse {
+    public function deleteOffer(int $id) : JsonResponse {
         $offer = Offer::where('id', $id)->first();
         if ($offer != null) {
             $offer->delete();

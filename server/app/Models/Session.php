@@ -8,7 +8,8 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class Session extends Model
 {
     protected $fillable = [
-        'offer',
+        'offer_id',
+        'inquiry_id',
         'proposed_by',
         'accepted_by',
         'status',
@@ -18,6 +19,10 @@ class Session extends Model
 
     public function offer() : BelongsTo {
         return $this->belongsTo(Offer::class);
+    }
+
+    public function inquiry() : BelongsTo {
+        return $this->belongsTo(Inquiry::class);
     }
 
     public function proposingUser() : BelongsTo {

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CourseController;
+use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\OfferController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -31,3 +32,9 @@ Route::get('/offers/{id}', [OfferController::class, 'getOfferById']);
 Route::post('/offers', [OfferController::class, 'saveOffer']);
 Route::put('/offers/{id}', [OfferController::class, 'updateOffer']);
 Route::delete('/offers/{id}', [OfferController::class, 'deleteOffer']);
+
+Route::get('/inquiries', [InquiryController::class, 'index']);
+Route::get('/inquiries/{id}', [InquiryController::class, 'getInquiryById']);
+Route::post('/inquiries', [InquiryController::class, 'saveInquiry']);
+Route::put('/inquiries/{id}', [InquiryController::class, 'updateInquiry']);
+Route::delete('/inquiries/{id}', [InquiryController::class, 'deleteInquiry']);
