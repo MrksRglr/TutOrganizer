@@ -23,9 +23,16 @@ class SessionController extends Controller
     public function saveSession(Request $request) : JsonResponse {
         DB::beginTransaction();
         try {
-            $session = Session::create($request->all());
-            DB::commit();
-            return response()->json($session, 200);
+            $dateIsValid = now()->lessThan($request->start_time);
+            if ($dateIsValid) {
+                $session = Session::create($request->all());
+                DB::commit();
+                return response()->json($session, 200);
+            } else {
+                return response()->json(["Zeitfenster ungültig -
+                gewünschter Termin liegt in der Vergangenheit oder es liegt eine
+                Terminüberschneidung vor."], 500);
+            }
         }
         catch (\Exception $e) {
             DB::rollBack();
@@ -36,13 +43,18 @@ class SessionController extends Controller
     public function updateSession(Request $request, int $id) : JsonResponse {
         DB::beginTransaction();
         try {
-            $session = Session::where('id', $id)->select('course_id', 'user_id')->first();
+            $dateIsValid = now()->lessThan($request->start_time);
+            $session = Session::where('id', $id)->first();
             if ($session != null) {
                 $session->update($request->all());
-                $session->save();
+                // $session->save();
                 DB::commit();
                 return response()->json($session, 200);
-            } else {
+            } elseif (!$dateIsValid) {
+                return response()->json(["Zeitfenster ungültig - Termin mit ID
+                '$id' liegt in der Vergangenheit oder es liegt eine Terminüberschneidung vor."], 500);
+            }
+            else {
                 return response()->json(["Termin mit ID '$id' konnte nicht gefunden werden."], 404);
             }
         }
@@ -53,12 +65,13 @@ class SessionController extends Controller
     }
 
     public function deleteSession(int $id) : JsonResponse {
-        $offer = Session::where('id', $id)->first();
-        if ($offer != null) {
-            $offer->delete();
+        $session = Session::where('id', $id)->first();
+        if ($session != null) {
+            $session->delete();
             return response()->json("Termin mit der ID '$id' wurde gelöscht.", 200);
         } else {
             return response()->json(["Termin mit der ID '$id' konnte nicht gefunden werden."], 404);
         }
     }
+
 }

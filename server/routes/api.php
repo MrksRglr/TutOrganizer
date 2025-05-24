@@ -3,6 +3,7 @@
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\OfferController;
+use App\Http\Controllers\SessionController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -38,3 +39,9 @@ Route::get('/inquiries/{id}', [InquiryController::class, 'getInquiryById']);
 Route::post('/inquiries', [InquiryController::class, 'saveInquiry']);
 Route::put('/inquiries/{id}', [InquiryController::class, 'updateInquiry']);
 Route::delete('/inquiries/{id}', [InquiryController::class, 'deleteInquiry']);
+
+Route::get('/sessions', [SessionController::class, 'index']);
+Route::get('/sessions/{id}', [SessionController::class, 'getSessionById']);
+Route::post('/sessions', [SessionController::class, 'saveSession']);
+Route::put('/sessions/{id}', [SessionController::class, 'updateSession']);
+Route::delete('/sessions/{id}', [SessionController::class, 'deleteSession']);
