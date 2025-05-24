@@ -47,7 +47,6 @@ class SessionController extends Controller
             $session = Session::where('id', $id)->first();
             if ($session != null) {
                 $session->update($request->all());
-                // $session->save();
                 DB::commit();
                 return response()->json($session, 200);
             } elseif (!$dateIsValid) {
