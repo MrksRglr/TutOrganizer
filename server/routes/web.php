@@ -4,6 +4,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TimeslotController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,3 +23,4 @@ Route::get('/courses', [CourseController::class, 'index']);
 Route::get('/offers', [OfferController::class, 'index']);
 Route::get('/inquiries', [InquiryController::class, 'index']);
 Route::get('/sessions', [SessionController::class, 'index']);
+Route::get('/timeslots', [TimeslotController::class, 'index']);

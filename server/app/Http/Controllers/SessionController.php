@@ -15,17 +15,25 @@ class SessionController extends Controller
     }
 
     public function getSessionById($id) : JsonResponse {
-        $session = Session::where('id', $id)->select('course_id', 'user_id', 'status')->first();
+        $session = Session::where('id', $id)->first();
         return $session != null ? response()->json($session, 200) : response()
-            ->json(['message' => 'Kein Termin unter dieser ID gefunden.'], 404);
+            ->json(['message' => 'Keine Session unter dieser ID gefunden.'], 404);
     }
 
     public function saveSession(Request $request) : JsonResponse {
         DB::beginTransaction();
         try {
-            $dateIsValid = now()->lessThan($request->start_time);
+            $session = Session::create($request->all());
+            foreach($request->timeslots as $slot) {
+                // Datumsvalidierung: Datum muss in der Zukunft liegen
+                $dateIsValid = now()->lessThan($slot['start_time']);
+                if ($dateIsValid) {
+                    $session->timeslots()->create($slot);
+                }
+            }
+
             if ($dateIsValid) {
-                $session = Session::create($request->all());
+
                 DB::commit();
                 return response()->json($session, 200);
             } else {

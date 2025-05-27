@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Session extends Model
 {
@@ -13,8 +14,8 @@ class Session extends Model
         'proposed_by',
         'accepted_by',
         'status',
-        'start_time',
-        'end_time',
+        'selected_timeslot_id',
+        'successfully_completed',
         'comment'];
 
     public function offer() : BelongsTo {
@@ -32,4 +33,13 @@ class Session extends Model
     public function acceptingUser() : BelongsTo {
         return $this->belongsTo(User::class, 'accepted_by');
     }
+
+    public function timeslots() : HasMany {
+        return $this->hasMany(Timeslot::class);
+    }
+
+    public function selectedTimeslot() : BelongsTo {
+        return $this->belongsTo(Timeslot::class, 'selected_timeslot_id');
+    }
+
 }

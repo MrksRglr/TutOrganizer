@@ -19,8 +19,11 @@ return new class extends Migration
             $table->foreignId('proposed_by')->constrained('users')->onDelete('cascade');
             $table->foreignId('accepted_by')->constrained('users')->onDelete('cascade');
             $table->enum('status', ['proposed', 'accepted', 'rejected'])->default('proposed');
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+            $table->foreignId('selected_timeslot_id')
+                ->nullable()
+                ->constrained('timeslots')
+                ->nullOnDelete();
+            $table->boolean('successfully_completed')->nullable();
             $table->text('comment')->nullable();
         });
     }

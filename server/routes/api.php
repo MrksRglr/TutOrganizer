@@ -4,6 +4,7 @@ use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\OfferController;
 use App\Http\Controllers\SessionController;
+use App\Http\Controllers\TimeslotController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -45,3 +46,9 @@ Route::get('/sessions/{id}', [SessionController::class, 'getSessionById']);
 Route::post('/sessions', [SessionController::class, 'saveSession']);
 Route::put('/sessions/{id}', [SessionController::class, 'updateSession']);
 Route::delete('/sessions/{id}', [SessionController::class, 'deleteSession']);
+
+Route::get('/timeslots', [TimeslotController::class, 'index']);
+Route::get('/timeslots/{id}', [TimeslotController::class, 'getTimeslotById']);
+Route::post('/timeslots', [TimeslotController::class, 'saveTimeslot']);
+Route::put('/timeslots/{id}', [TimeslotController::class, 'updateTimeslot']);
+Route::delete('/timeslots/{id}', [TimeslotController::class, 'deleteTimeslot']);
