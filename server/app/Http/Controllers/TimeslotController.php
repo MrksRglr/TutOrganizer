@@ -29,7 +29,7 @@ class TimeslotController extends Controller
         }
         catch (\Exception $e) {
             DB::rollBack();
-            return response()->json(["Timeslot konnte nicht angelegt werden." . $e->getMessage()], 500);
+            return response()->json(["Timeslot konnte nicht angelegt werden. " . $e->getMessage()], 500);
         }
     }
 

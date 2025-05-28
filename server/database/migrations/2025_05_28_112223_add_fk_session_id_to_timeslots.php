@@ -11,11 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('timeslots', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-            $table->dateTime('start_time');
-            $table->dateTime('end_time');
+        Schema::table('timeslots', function (Blueprint $table) {
+            $table->foreignId('session_id')->constrained()->onDelete('cascade');
         });
     }
 
@@ -24,6 +21,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('timeslots');
+        Schema::table('timeslots', function (Blueprint $table) {
+            $table->dropColumn('session_id');
+        });
     }
 };
