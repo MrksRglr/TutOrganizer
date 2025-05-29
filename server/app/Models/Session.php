@@ -14,7 +14,6 @@ class Session extends Model
         'proposed_by',
         'accepted_by',
         'status',
-        'selected_timeslot_id',
         'successfully_completed',
         'comment'];
 
@@ -36,10 +35,6 @@ class Session extends Model
 
     public function timeslots() : HasMany {
         return $this->hasMany(Timeslot::class);
-    }
-
-    public function selectedTimeslot() : BelongsTo {
-        return $this->belongsTo(Timeslot::class, 'selected_timeslot_id');
     }
 
 }

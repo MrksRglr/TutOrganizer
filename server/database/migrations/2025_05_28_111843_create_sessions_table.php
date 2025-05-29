@@ -17,12 +17,11 @@ return new class extends Migration
             $table->foreignId('offer_id')->constrained()->onDelete('cascade');;
             $table->foreignId('inquiry_id')->constrained()->onDelete('cascade');
             $table->foreignId('proposed_by')->constrained('users')->onDelete('cascade');
-            $table->foreignId('accepted_by')->constrained('users')->onDelete('cascade');
-            $table->enum('status', ['proposed', 'accepted', 'rejected'])->default('proposed');
-            $table->foreignId('selected_timeslot_id')
+            $table->foreignId('accepted_by')
                 ->nullable()
-                ->constrained('timeslots')
-                ->nullOnDelete();
+                ->constrained('users')
+                ->onDelete('cascade');
+            $table->enum('status', ['proposed', 'accepted', 'rejected'])->default('proposed');
             $table->boolean('successfully_completed')->nullable();
             $table->text('comment')->nullable();
         });
