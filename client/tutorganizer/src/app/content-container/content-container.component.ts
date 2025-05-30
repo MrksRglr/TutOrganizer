@@ -1,11 +1,18 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
+import {RouterOutlet} from '@angular/router';
 
 @Component({
   selector: 'bs-content-container',
-  imports: [],
+  standalone: true,
+  imports: [
+    RouterOutlet
+  ],
   templateUrl: './content-container.component.html',
-  styles: ``
+  styles: ``,
 })
-export class ContentContainerComponent {
 
+export class ContentContainerComponent implements OnInit {
+
+  ngOnInit() {
+  }
 }

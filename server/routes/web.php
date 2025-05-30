@@ -20,7 +20,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [CourseController::class, 'index']);
 Route::get('/courses', [CourseController::class, 'index']);
-Route::get('/offers', [OfferController::class, 'index']);
+Route::get('/offer-item', [OfferController::class, 'index']);
 Route::get('/inquiries', [InquiryController::class, 'index']);
 Route::get('/sessions', [SessionController::class, 'index']);
 Route::get('/timeslots', [TimeslotController::class, 'index']);

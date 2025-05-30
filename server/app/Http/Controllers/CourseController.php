@@ -37,7 +37,7 @@ class CourseController extends Controller
     public function updateCourse(Request $request, string $code) : JsonResponse {
         DB::beginTransaction();
         try {
-            $course = Course::with('offers')->where('code', $code)->first();
+            $course = Course::with('offer-item')->where('code', $code)->first();
             if ($course != null) {
                 $course->update($request->all());
                 $course->save();

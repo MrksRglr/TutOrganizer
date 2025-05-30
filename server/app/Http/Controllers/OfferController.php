@@ -11,12 +11,12 @@ use Illuminate\Support\Facades\DB;
 class OfferController extends Controller
 {
     public function index() : JsonResponse {
-        $offers = Offer::all();
+        $offers = Offer::with('course', 'user')->get();
         return response()->json($offers, 200);
     }
 
     public function getOfferById($id) : JsonResponse {
-        $offer = Offer::where('id', $id)->select('course_id', 'user_id', 'description')->first();
+        $offer = Offer::with('course', 'user')->where('id', $id)->get();
         return $offer != null ? response()->json($offer, 200) : response()
             ->json(['message' => 'Kein Angebot unter dieser ID gefunden.'], 404);
     }

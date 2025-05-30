@@ -1,12 +1,11 @@
-<div class="bg-gray-900 min-h-screen flex flex-col flex-1">
+<div class="bg-gray-900 min-h-screen flex flex-col">
   <div class="container p-4">
     <h1 class="font-cascadia text-white text-5xl">TutOrganizer 🎓</h1>
   </div>
 
   <bs-navbar></bs-navbar>
-  <bs-content-container class="flex flex-1"></bs-content-container>
+  <bs-content-container class="flex-1 overflow-hidden">
+    <ng-content></ng-content>
+  </bs-content-container>
 
-</div>
-<div class="container">
-  <router-outlet></router-outlet>
 </div>

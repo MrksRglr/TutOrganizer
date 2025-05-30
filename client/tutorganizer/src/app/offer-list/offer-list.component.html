@@ -1,0 +1,8 @@
+<div class="flex container">
+  @for (offer of offers; track offer) {
+  <bs-offer-item [offer]="offer" (detailsRequested)="onShowDetails($event)">
+  </bs-offer-item>
+  }
+</div>
+
+<bs-offer-details></bs-offer-details>

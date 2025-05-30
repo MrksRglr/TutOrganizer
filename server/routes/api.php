@@ -29,11 +29,11 @@ Route::post('/courses', [CourseController::class, 'saveCourse']);
 Route::put('/courses/{code}', [CourseController::class, 'updateCourse']);
 Route::delete('/courses/{code}', [CourseController::class, 'deleteCourse']);
 
-Route::get('/offers', [OfferController::class, 'index']);
-Route::get('/offers/{id}', [OfferController::class, 'getOfferById']);
-Route::post('/offers', [OfferController::class, 'saveOffer']);
-Route::put('/offers/{id}', [OfferController::class, 'updateOffer']);
-Route::delete('/offers/{id}', [OfferController::class, 'deleteOffer']);
+Route::get('/offer-item', [OfferController::class, 'index']);
+Route::get('/offer-item/{id}', [OfferController::class, 'getOfferById']);
+Route::post('/offer-item', [OfferController::class, 'saveOffer']);
+Route::put('/offer-item/{id}', [OfferController::class, 'updateOffer']);
+Route::delete('/offer-item/{id}', [OfferController::class, 'deleteOffer']);
 
 Route::get('/inquiries', [InquiryController::class, 'index']);
 Route::get('/inquiries/{id}', [InquiryController::class, 'getInquiryById']);
