@@ -1,8 +1,13 @@
 @let o = offer();
-<div class="card bg-primary text-primary-content w-96">
+<div class="card bg-secondary text-primary-content w-96">
   <div class="card-body">
-    <h2 class="card-title">{{ o.description }}</h2>
-    <p>A card component has a figure, a body part, and inside body there are title and actions parts</p>
+    <h2 class="card-title">[{{ o.course.code }}] {{ o.course.name }}</h2>
+    @if (o.description && o.description.length > 150) {
+    <p>{{ o.description | slice:0:150 }}…</p>
+    } @else {
+    <p>{{ o.description }}</p>
+    }
+
     <div class="card-actions justify-end">
       <button class="btn" (click)="showDetails(o)">Details</button>
     </div>

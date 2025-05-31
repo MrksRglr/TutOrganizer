@@ -1,7 +1,12 @@
-<div class="flex container">
-  @for (offer of offers; track offer) {
+<div class="flex flex-wrap justify-center gap-4 p-4">
+  @for (offer of offers(); track offer) {
   <bs-offer-item [offer]="offer" (detailsRequested)="onShowDetails($event)">
   </bs-offer-item>
+  }
+  @if(!offers()) {
+    <h4 class="text-center">Angebote werden geladen...
+      <span class="loading loading-bars loading-lg"></span>
+    </h4>
   }
 </div>
 

@@ -4,10 +4,42 @@
     <form method="dialog">
       <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
     </form>
-    <h3 class="text-lg font-bold">{{ o?.description }}</h3>
-    <p class="py-4">Press ESC key or click the button below to close</p>
-    <div class="modal-action">
-      <button class="btn">Anfrage senden</button>
-    </div>
+    @if (o) {
+    <p class="absolute left-2 top-2">#{{o.id}}</p>
+      <h3 class="mt-2 text-lg font-bold">[{{ o.course.code }}] {{ o.course.name }}</h3>
+      <p class="py-4">Anbieter:
+        <button class="btn btn-link" (click)="openTutorModal()">{{ o.user.name }}</button>
+      </p>
+      @if (isEditing) {
+        <textarea
+          [formControl]="editOfferControl"
+          class="textarea textarea-bordered w-full"
+          rows="5">
+        </textarea>
+        <div class="flex gap-2 mt-2">
+          <button class="btn btn-primary btn-outline" (click)="saveEdit()">Speichern</button>
+          <button class="btn btn-secondary btn-outline" (click)="cancelEdit()">Verwerfen</button>
+        </div>
+      } @else {
+        <p class="py-4">{{ o.description }}</p>
+        <div class="modal-action" [@if]="!isEditing">
+          <button class="btn btn-warning btn-outline" (click)="startEdit()">bearbeiten</button>
+          <button class="btn btn-error btn-outline" (click)="removeOffer()">löschen</button>
+          <button class="btn btn-success btn-outline">Anfrage senden</button>
+        </div>
+      }
+    }
   </div>
+</dialog>
+
+<dialog #tutorModalRef class="modal">
+  <div class="modal-box">
+    @if (o) {
+      <h3 class="text-lg font-bold">Ausbildung von {{ o.user.name }}</h3>
+      <p class="py-4">{{ o.user.education }}</p>
+    }
+  </div>
+  <form method="dialog" class="modal-backdrop">
+    <button>close</button>
+  </form>
 </dialog>

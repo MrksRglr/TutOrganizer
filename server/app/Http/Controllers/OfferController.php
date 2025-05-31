@@ -37,7 +37,7 @@ class OfferController extends Controller
     public function updateOffer(Request $request, int $id) : JsonResponse {
         DB::beginTransaction();
         try {
-            $offer = Offer::where('id', $id)->select('course_id', 'user_id')->first();
+            $offer = Offer::where('id', $id)->first();
             if ($offer != null) {
                 $offer->update($request->all());
                 $offer->save();
