@@ -1,11 +1,16 @@
-import {Injectable} from '@angular/core';
+import {inject, Injectable, signal} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {jwtDecode} from 'jwt-decode';
+import {User} from './user';
+import {tap} from 'rxjs/operators';
 
 interface Token {
   exp: number;
   user : {
     id:string;
+    name:string;
+    email:string;
+    role:string;
   }
 }
 
@@ -13,20 +18,43 @@ interface Token {
   providedIn: 'root'
 })
 export class AuthenticationService {
+  constructor() {
+    const userJson = sessionStorage.getItem("user");
+    if(userJson) {
+      this.user.set(JSON.parse(userJson));
+    }
+  }
+
   private api = "http://tutorganizer.s2210456031.student.kwmhgb.at/api/auth";
-  constructor(private http: HttpClient) { }
+
+  isLoggedIn = signal(this.hasValidToken());
+  user = signal<User | null>(null);
+
+  http = inject(HttpClient);
 
   login(email: string, password: string) {
-    return this.http.post(`${this.api}/login`, {email, password})
+    return this.http.post<{access_token: string, user: User}>(`${this.api}/login`, {email, password})
+      .pipe(tap(response => {
+        this.setSessionStorage(response.access_token, response.user);
+      })
+    );
   }
 
   logout() {
-    this.http.post(`${this.api}/logout`, {})
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userId");
+    this.http.post(`${this.api}/logout`, {}).subscribe({
+    next: () => {this.clearSession();},
+    error: () => {this.clearSession();}
+    });
   }
 
-  public isLoggedIn(): boolean {
+  private clearSession() {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("userId");
+    sessionStorage.removeItem("user");
+    this.isLoggedIn.set(false);
+  }
+
+  public hasValidToken(): boolean {
     if(sessionStorage.getItem("token")){
       let token: string = <string>sessionStorage.getItem("token");
       const decodedToken = jwtDecode(token) as Token;
@@ -35,6 +63,7 @@ export class AuthenticationService {
       if(expirationDate < new Date()) {
         sessionStorage.removeItem("token");
         sessionStorage.removeItem("userId");
+        sessionStorage.removeItem("user");
         return false;
       }
       return true;
@@ -47,10 +76,30 @@ export class AuthenticationService {
     return Number.parseInt(<string>sessionStorage.getItem("userId") || "-1");
   }
 
-  setSessionStorage(access_token: string) {
+  /*
+  legacy: hat leider nicht geklappt
+
+  loadCurrentUser() {
+    const token = sessionStorage.getItem("token");
+    if(!token) return this.user.set(null);
+
+    this.http.get<User>(`${this.api}/user/`, {
+      headers: {Authorization: `Bearer ${token}`},
+      withCredentials: true
+    }).subscribe({
+      next: (user) => this.user.set(user),
+      error: () => this.user.set(null)
+    });
+  }
+  */
+
+  setSessionStorage(access_token: string, user: User) {
     console.log(jwtDecode(access_token));
     const decodedToken = jwtDecode(access_token) as Token;
     sessionStorage.setItem("token", access_token);
     sessionStorage.setItem("userId", decodedToken.user.id);
+
+    this.user.set(user);
+    this.isLoggedIn.set(true);
   }
 }

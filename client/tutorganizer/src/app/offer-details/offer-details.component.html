@@ -22,11 +22,19 @@
         </div>
       } @else {
         <p class="py-4">{{ o.description }}</p>
-        <div class="modal-action" [@if]="!isEditing">
-          <button class="btn btn-warning btn-outline" (click)="startEdit()">bearbeiten</button>
-          <button class="btn btn-error btn-outline" (click)="removeOffer()">löschen</button>
-          <button class="btn btn-success btn-outline">Anfrage senden</button>
-        </div>
+
+        @if (isLoggedIn() && o) {
+          <div class="modal-action" [@if]="!isEditing">
+            @if (isTutor()) {
+              <button class="btn btn-warning btn-outline" (click)="startEdit()">bearbeiten</button>
+              <button class="btn btn-error btn-outline" (click)="removeOffer()">löschen</button>
+            }
+
+            @if (isStudent()) {
+              <button class="btn btn-success btn-outline" (click)="createInquiry()">Anfrage senden</button>
+            }
+          </div>
+        }
       }
     }
   </div>

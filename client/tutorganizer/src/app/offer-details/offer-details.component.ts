@@ -1,9 +1,10 @@
-import {Component, ElementRef, inject, signal, ViewChild} from '@angular/core';
+import {Component, computed, ElementRef, inject, Signal, signal, ViewChild} from '@angular/core';
 import {Offer} from '../shared/offer';
 import {TutOrganizerService} from '../shared/tut-organizer.service';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {FormControl, ReactiveFormsModule} from '@angular/forms';
+import {AuthenticationService} from '../shared/authentification.service';
 
 @Component({
   selector: 'bs-offer-details',
@@ -17,8 +18,13 @@ export class OfferDetailsComponent {
   ts = inject(TutOrganizerService);
   router = inject(Router);
   toastr = inject(ToastrService);
+  authService = inject(AuthenticationService);
 
   offer = signal<Offer | undefined>(undefined);
+  userRole = computed(() => this.authService.user()?.role);
+  isLoggedIn = this.authService.isLoggedIn;
+  isTutor: Signal<boolean> = computed(() => this.userRole() === 'tutor');
+  isStudent: Signal<boolean> = computed(() => this.userRole() === 'student');
 
   isEditing = false;
   editOfferControl = new FormControl('');
@@ -73,5 +79,16 @@ export class OfferDetailsComponent {
         });
       }
     }
+  }
+
+  createInquiry() {
+    const inquiryData = {
+      user_id: this.authService.getCurrentUserId(),
+      offer_id: this.offer()!.id
+    }
+    this.ts.createInquiry(inquiryData).subscribe({
+      next: () => {this.toastr.success('Anfrage wurde gesendet.', 'TutOrganizer');},
+      error: () => {this.toastr.error('Anfrage konnte nicht gesendet werden.', 'TutOrganizer');}
+    })
   }
 }

@@ -1,0 +1,29 @@
+<form class="flex flex-col items-center justify-start mt-10 min-h-screen" [formGroup]="offerForm" (ngSubmit)="submitForm()">
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+    <legend class="fieldset-legend">Neues Angebot</legend>
+
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-warning">{{ selectedCourse?.name || 'Kurs auswählen' }}</div>
+      <ul tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm">
+        @for (course of courses; track course.id) {
+          <li><a onclick="document.activeElement.blur()" (click)="selectCourse(course)">{{ course.name }}</a></li>
+        }
+      </ul>
+    </div>
+    @if (errors['course']) {
+      <p class="text-red-500 text-sm">{{ errors['course'] }}</p>
+    }
+
+    <p class="label">Beschreibung (optional)</p>
+    <input type="text" class="input" placeholder="Beschreibung..." formControlName="description" />
+    @if(errors['description']) {
+      <p class="text-red-500">{{ errors['description'] }}</p>
+    }
+
+    <div class="flex justify-between mt-4">
+      <button type="submit" class="btn btn-primary btn-outline">Angebot erstellen</button>
+      <button type="button" class="btn btn-secondary btn-outline" (click)="cancel()">Verwerfen</button>
+    </div>
+
+  </fieldset>
+</form>

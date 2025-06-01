@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CourseController;
 use App\Http\Controllers\InquiryController;
 use App\Http\Controllers\OfferController;
@@ -22,6 +23,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('auth/login', [AuthController::class, 'login']);
+Route::post('/auth/logout', [AuthController::class, 'logout']);
 
 Route::get('/courses', [CourseController::class, 'index']);
 Route::get('/courses/{code}', [CourseController::class, 'getCourseByCode']);

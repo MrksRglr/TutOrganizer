@@ -3,11 +3,21 @@
   <bs-offer-item [offer]="offer" (detailsRequested)="onShowDetails($event)">
   </bs-offer-item>
   }
+
   @if(!offers()) {
     <h4 class="text-center">Angebote werden geladen...
       <span class="loading loading-bars loading-lg"></span>
     </h4>
   }
 </div>
+
+@if (authService.isLoggedIn() && authService.user()?.role === 'tutor') {
+<div class="fixed bottom-10 right-16">
+  <a class="btn btn-circle btn-xl btn-accent text-3xl"
+          title="Neues Angebot erstellen"
+          routerLink="./new_offer_form"
+  >+</a>
+</div>
+}
 
 <bs-offer-details></bs-offer-details>

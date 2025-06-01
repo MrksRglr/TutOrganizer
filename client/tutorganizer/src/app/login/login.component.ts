@@ -32,25 +32,22 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  login(){
+  login() {
     const val = this.loginForm.value;
-    this.authService.login(val.username, val.password).subscribe(
-      (res:any) =>{
+    this.authService.login(val.username, val.password).subscribe({
+      next: (res) => {
         console.log(res);
-        this.authService.setSessionStorage((res as Response).access_token);
-        this.router.navigateByUrl("/")
-      },()=>{
-        this.toastr.error('Logindaten inkorrekt!',"TutOrganizer");
+        this.authService.setSessionStorage(res.access_token, res.user);
+        this.router.navigate(['/']);
+      },
+      error: () => {
+        this.toastr.error('Logindaten inkorrekt!', "TutOrganizer");
       }
-    )
+    });
   }
 
   isLoggedIn() {
     return this.authService.isLoggedIn();
-  }
-
-  logout() {
-    this.authService.logout();
   }
 
 }

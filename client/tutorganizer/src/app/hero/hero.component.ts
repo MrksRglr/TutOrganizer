@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {RouterLink, RouterLinkActive} from '@angular/router';
+import {AuthenticationService} from '../shared/authentification.service';
 
 @Component({
   selector: 'bs-hero',
@@ -7,9 +8,10 @@ import {RouterLink, RouterLinkActive} from '@angular/router';
   imports: [
     RouterLink,
     RouterLinkActive
+
   ],
   templateUrl: './hero.component.html',
 })
 export class HeroComponent {
-
+  authService = inject(AuthenticationService);
 }
