@@ -1,0 +1,23 @@
+@let i = inquiry();
+<div class="card bg-slate-300 text-primary-content w-96">
+  <div class="card-body">
+    <p class="absolute left-2 top-2">#{{i.id}}</p>
+    <h2 class="card-title">[{{ i.offer.course.code }}] {{ i.offer.course.name }}</h2>
+    <p class="font-semibold">Anbieter:
+      <button class="btn opacity-80 btn-active btn-neutral">{{ i.offer.user.name }}</button>
+    <p class="font-semibold">Angefragt von:
+      <button class="btn opacity-80 btn-active btn-neutral">{{ i.user.name }}</button>
+    <p class="font-semibold">Status:
+      <button class="btn opacity-80 btn-active btn-neutral">{{ i.status }}</button>
+    </p>
+
+    <div class="card-actions justify-end">
+      <button class="btn btn-error" (click)="removeInquiry()">Anfrage löschen</button>
+      @if(authService.isLoggedIn() && isTutor()) {
+      <a class="btn btn-soft" routerLink="/sessions/new_session_form"
+         [queryParams]="{ inquiryId: i.id }">Termin(e) anbieten</a>
+      }
+    </div>
+
+  </div>
+</div>

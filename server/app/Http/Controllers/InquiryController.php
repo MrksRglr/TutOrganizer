@@ -10,12 +10,12 @@ use Illuminate\Support\Facades\DB;
 class InquiryController extends Controller
 {
     public function index() : JsonResponse {
-        $inquiries = Inquiry::all();
+        $inquiries = Inquiry::with('user', 'offer.course', 'offer.user')->get();
         return response()->json($inquiries, 200);
     }
 
     public function getInquiryById($id) : JsonResponse {
-        $inquiry = Inquiry::where('id', $id)->select('course_id', 'user_id', 'status')->first();
+        $inquiry = Inquiry::with('user', 'offer.course', 'offer.user')->where('id', $id)->get();
         return $inquiry != null ? response()->json($inquiry, 200) : response()
             ->json(['message' => 'Keine Anfrage unter dieser ID gefunden.'], 404);
     }

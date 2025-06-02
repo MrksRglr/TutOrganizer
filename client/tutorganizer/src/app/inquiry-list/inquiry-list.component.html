@@ -1,0 +1,11 @@
+<div class="flex flex-wrap justify-center gap-4 p-4">
+  @for (inquiry of filteredInquiries(); track inquiry) {
+    <bs-inquiry-item [inquiry]="inquiry" (inquiryRemoved)="loadInquiries()"></bs-inquiry-item>
+  }
+
+  @if(!filteredInquiries()) {
+    <h4 class="text-center">Anfragen werden geladen...
+      <span class="loading loading-bars loading-lg"></span>
+    </h4>
+  }
+</div>

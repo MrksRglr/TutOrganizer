@@ -11,9 +11,9 @@ import {SlicePipe} from '@angular/common';
   templateUrl: './offer-item.component.html',
   styles: ``
 })
-export class OffersComponent {
-
+export class OfferItemComponent {
   offer = input.required<Offer>();
+
   detailsRequested = output<Offer>();
 
   showDetails(offer: Offer) {

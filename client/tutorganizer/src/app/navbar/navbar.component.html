@@ -6,6 +6,10 @@
     <div class="navbar-center">
       <a routerLink="home" routerLinkActive="active" class="btn btn-ghost text-xl mx-auto">Home</a>
       <a routerLink="offers" routerLinkActive="active" class="btn btn-ghost text-xl mx-auto">Kursangebote</a>
+      @if (authService.isLoggedIn()) {
+      <a routerLink="inquiries" routerLinkActive="active" class="btn btn-ghost text-xl mx-auto">Anfragen</a>
+      <a routerLink="sessions" routerLinkActive="active" class="btn btn-ghost text-xl mx-auto">Termine</a>
+      }
     </div>
 
     <div class="navbar-end">
@@ -19,7 +23,7 @@
         <div tabindex="0" class="avatar">
           <div class="w-10 rounded-full">
             <img
-              alt="Tailwind CSS Navbar component"
+              alt="stock photo of a user image"
               src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
           </div>
         </div>

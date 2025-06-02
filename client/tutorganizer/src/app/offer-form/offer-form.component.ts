@@ -17,11 +17,11 @@ import {Router} from '@angular/router';
   styles: ``
 })
 export class OfferFormComponent implements OnInit {
-  private fb = inject(FormBuilder);
-  private ts = inject(TutOrganizerService);
-  private toastr = inject(ToastrService);
-  private authService = inject(AuthenticationService);
-  private router = inject(Router);
+  fb = inject(FormBuilder);
+  ts = inject(TutOrganizerService);
+  toastr = inject(ToastrService);
+  authService = inject(AuthenticationService);
+  router = inject(Router);
 
   offerForm!: FormGroup;
   courses: Course[] = [];

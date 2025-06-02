@@ -1,0 +1,11 @@
+<div class="flex flex-wrap justify-center gap-4 p-4">
+  @for (session of filteredSessions(); track session) {
+    <bs-session-item [session]="session"></bs-session-item>
+  }
+
+  @if(!filteredSessions()) {
+    <h4 class="text-center">Termine werden geladen...
+      <span class="loading loading-bars loading-lg"></span>
+    </h4>
+  }
+</div>

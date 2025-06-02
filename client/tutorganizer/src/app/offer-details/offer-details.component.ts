@@ -90,5 +90,6 @@ export class OfferDetailsComponent {
       next: () => {this.toastr.success('Anfrage wurde gesendet.', 'TutOrganizer');},
       error: () => {this.toastr.error('Anfrage konnte nicht gesendet werden.', 'TutOrganizer');}
     })
+    this.close();
   }
 }

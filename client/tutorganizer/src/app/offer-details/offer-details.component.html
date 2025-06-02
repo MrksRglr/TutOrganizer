@@ -23,8 +23,8 @@
       } @else {
         <p class="py-4">{{ o.description }}</p>
 
-        @if (isLoggedIn() && o) {
-          <div class="modal-action" [@if]="!isEditing">
+        @if (isLoggedIn() && o && !isEditing) {
+          <div class="modal-action">
             @if (isTutor()) {
               <button class="btn btn-warning btn-outline" (click)="startEdit()">bearbeiten</button>
               <button class="btn btn-error btn-outline" (click)="removeOffer()">löschen</button>
@@ -33,8 +33,7 @@
             @if (isStudent()) {
               <button class="btn btn-success btn-outline" (click)="createInquiry()">Anfrage senden</button>
             }
-          </div>
-        }
+          </div>}
       }
     }
   </div>

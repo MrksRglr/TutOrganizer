@@ -1,0 +1,35 @@
+<form class="flex flex-col items-center justify-start mt-10 min-h-screen" [formGroup]="sessionForm" (ngSubmit)="submitForm()">
+  <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
+    <legend class="fieldset-legend">Neuer Termin</legend>
+
+
+
+    <input type="datetime-local" id="timeslot" class="input"
+           formControlName="timeslot" />
+    <label for="timeslot">Startzeitpunkt</label>
+    @if (errors['timeslot']) {
+      <p class="text-red-500 text-sm">{{ errors['timeslot'] }}</p>
+    }
+
+    <div class="dropdown">
+      <div tabindex="0" role="button" class="btn btn-warning">Dauer (Stunden)</div>
+      <select tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
+      formControlName="duration">
+        <option [value]="1">1 Stunde</option>
+        <option [value]="2">2 Stunden</option>
+        <option [value]="3">3 Stunden</option>
+      </select>
+    </div>
+    @if (errors['duration']) {
+      <p class="text-red-500 text-sm">{{ errors['duration'] }}</p>
+    }
+
+    <button class="btn btn-ghost" (click)="addTimeslot()">Timeslot hinzufügen</button>
+
+    <div class="flex justify-between mt-4">
+      <button type="submit" class="btn btn-primary btn-outline">Termin erstellen</button>
+      <button type="button" class="btn btn-secondary btn-outline" (click)="cancel()">Verwerfen</button>
+    </div>
+
+  </fieldset>
+</form>

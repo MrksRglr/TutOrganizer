@@ -76,23 +76,6 @@ export class AuthenticationService {
     return Number.parseInt(<string>sessionStorage.getItem("userId") || "-1");
   }
 
-  /*
-  legacy: hat leider nicht geklappt
-
-  loadCurrentUser() {
-    const token = sessionStorage.getItem("token");
-    if(!token) return this.user.set(null);
-
-    this.http.get<User>(`${this.api}/user/`, {
-      headers: {Authorization: `Bearer ${token}`},
-      withCredentials: true
-    }).subscribe({
-      next: (user) => this.user.set(user),
-      error: () => this.user.set(null)
-    });
-  }
-  */
-
   setSessionStorage(access_token: string, user: User) {
     console.log(jwtDecode(access_token));
     const decodedToken = jwtDecode(access_token) as Token;
