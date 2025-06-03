@@ -5,11 +5,13 @@ import {Inquiry} from '../shared/inquiry';
 import {ActivatedRoute, Router} from '@angular/router';
 import {TutOrganizerService} from '../shared/tut-organizer.service';
 import {ToastrService} from 'ngx-toastr';
+import {DatePipe, formatDate} from '@angular/common';
 
 @Component({
   selector: 'bs-session-form',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    DatePipe
   ],
   templateUrl: './session-form.component.html',
   styles: ``
@@ -30,8 +32,10 @@ export class SessionFormComponent implements OnInit {
   ngOnInit() {
 
     const inquiryId = Number(this.route.snapshot.queryParamMap.get('inquiryId'));
+
     this.sessionForm = this.fb.group({
-      timeslot: [null, Validators.required],
+      date: [null, Validators.required],
+      time: [null, Validators.required],
       duration: [null, Validators.required],
       comment: ['']
     });
@@ -47,15 +51,21 @@ export class SessionFormComponent implements OnInit {
       return;
     }
 
-    const datetime = this.sessionForm.value.timeslot;
-    const duration = this.sessionForm.value.duration;
+    const date = this.sessionForm.value.date;
+    const time = this.sessionForm.value.time;
+    const duration = Number(this.sessionForm.value.duration);
 
-    if (!datetime || !duration) {
+    if (!date || !time || !duration) {
       this.errors['timeslot'] = 'Bitte Startzeit und Dauer angeben.';
       return;
     }
 
-    const start = new Date(datetime);
+    const start = new Date(`${date}T${time}`);
+    if (!start) {
+      this.errors['timeslot'] = 'Ungültiges Datum oder Uhrzeit.';
+      return;
+    }
+
     const end = new Date(start.getTime() + duration * 3600000);
 
     this.timeslots.push({
@@ -64,7 +74,8 @@ export class SessionFormComponent implements OnInit {
       session_id: null as any
     });
 
-    this.sessionForm.get('timeslot')?.reset();
+    this.sessionForm.get('date')?.reset();
+    this.sessionForm.get('time')?.reset();
     this.sessionForm.get('duration')?.reset();
     delete this.errors['timeslot'];
   }
@@ -72,6 +83,11 @@ export class SessionFormComponent implements OnInit {
   submitForm() {
     if (!this.inquiry) {
       this.toastr.error('Anfrage nicht geladen.', 'TutOrganizer');
+      return;
+    }
+
+    if (!this.inquiry.offer) {
+      this.toastr.error('Ungültige Anfrage: Angebot fehlt.', 'TutOrganizer');
       return;
     }
 
@@ -86,8 +102,8 @@ export class SessionFormComponent implements OnInit {
       proposed_by: this.inquiry.offer.user.id,
       comment: this.sessionForm.value.comment || '',
       timeslots: this.timeslots.map(ts => ({
-        start_time: ts.start_time,
-        end_time: ts.end_time
+        start_time: formatDate(ts.start_time, 'yyyy-MM-dd HH:mm:ss', 'en'),
+        end_time: formatDate(ts.end_time, 'yyyy-MM-dd HH:mm:ss', 'en'),
       }))
     };
 
@@ -106,6 +122,10 @@ export class SessionFormComponent implements OnInit {
     this.sessionForm.reset();
     this.errors = {};
     this.router.navigate(['/inquiries']);
+  }
+
+  removeTimeslot(slotToRemove: Timeslot) {
+    this.timeslots = this.timeslots.filter(slot => slot !== slotToRemove);
   }
 
 }

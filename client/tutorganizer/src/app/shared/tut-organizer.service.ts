@@ -80,4 +80,13 @@ export class TutOrganizerService {
       .pipe(retry(3), catchError(this.errorHandler));
   }
 
+  removeSession(id: number): Observable<any> {
+    return this.http.delete(`${this.api}/sessions/${id}`)
+      .pipe(retry(3), catchError(this.errorHandler));
+  }
+
+  editSession(id: number, session: Session): Observable<any> {
+    return this.http.put(`${this.api}/sessions/${id}`, session)
+  }
+
 }

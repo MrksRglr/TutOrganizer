@@ -16,7 +16,7 @@ class OfferController extends Controller
     }
 
     public function getOfferById($id) : JsonResponse {
-        $offer = Offer::with('course', 'user')->where('id', $id)->get();
+        $offer = Offer::with('course', 'user')->where('id', $id)->first();
         return $offer != null ? response()->json($offer, 200) : response()
             ->json(['message' => 'Kein Angebot unter dieser ID gefunden.'], 404);
     }

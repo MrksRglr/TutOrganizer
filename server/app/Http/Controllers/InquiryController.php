@@ -15,7 +15,7 @@ class InquiryController extends Controller
     }
 
     public function getInquiryById($id) : JsonResponse {
-        $inquiry = Inquiry::with('user', 'offer.course', 'offer.user')->where('id', $id)->get();
+        $inquiry = Inquiry::with('user', 'offer.course', 'offer.user')->where('id', $id)->first();
         return $inquiry != null ? response()->json($inquiry, 200) : response()
             ->json(['message' => 'Keine Anfrage unter dieser ID gefunden.'], 404);
     }

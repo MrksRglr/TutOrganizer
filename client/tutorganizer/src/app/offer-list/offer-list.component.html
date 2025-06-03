@@ -3,12 +3,6 @@
   <bs-offer-item [offer]="offer" (detailsRequested)="onShowDetails($event)">
   </bs-offer-item>
   }
-
-  @if(!offers()) {
-    <h4 class="text-center">Angebote werden geladen...
-      <span class="loading loading-bars loading-lg"></span>
-    </h4>
-  }
 </div>
 
 @if (authService.isLoggedIn() && authService.user()?.role === 'tutor') {

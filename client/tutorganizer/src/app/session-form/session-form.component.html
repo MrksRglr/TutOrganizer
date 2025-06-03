@@ -2,32 +2,51 @@
   <fieldset class="fieldset bg-base-200 border-base-300 rounded-box w-xs border p-4">
     <legend class="fieldset-legend">Neuer Termin</legend>
 
-
-
-    <input type="datetime-local" id="timeslot" class="input"
-           formControlName="timeslot" />
-    <label for="timeslot">Startzeitpunkt</label>
-    @if (errors['timeslot']) {
-      <p class="text-red-500 text-sm">{{ errors['timeslot'] }}</p>
+    <input type="date" id="date" class="input" formControlName="date"/>
+    <label for="date">Datum</label>
+    @if (errors['date']) {
+      <p class="text-red-500 text-sm">{{ errors['date'] }}</p>
     }
 
-    <div class="dropdown">
-      <div tabindex="0" role="button" class="btn btn-warning">Dauer (Stunden)</div>
-      <select tabindex="0" class="dropdown-content menu bg-base-100 rounded-box z-1 w-52 p-2 shadow-sm"
-      formControlName="duration">
-        <option [value]="1">1 Stunde</option>
-        <option [value]="2">2 Stunden</option>
-        <option [value]="3">3 Stunden</option>
-      </select>
-    </div>
+    <input type="time" id="time" class="input" formControlName="time"/>
+    <label for="time">Beginnzeit</label>
+    @if (errors['time']) {
+      <p class="text-red-500 text-sm">{{ errors['time'] }}</p>
+    }
+
+    <select id="duration" class="select select-warning w-full max-w-xs mt-4" formControlName="duration">
+      <option value="1">1 Stunde</option>
+      <option value="2">2 Stunden</option>
+      <option value="3">3 Stunden</option>
+    </select>
+    <label for="duration" class="mb-4">Dauer (Stunden)</label>
     @if (errors['duration']) {
       <p class="text-red-500 text-sm">{{ errors['duration'] }}</p>
     }
 
-    <button class="btn btn-ghost" (click)="addTimeslot()">Timeslot hinzufügen</button>
+    <button type="button" class="btn btn-ghost" (click)="addTimeslot()">Timeslot hinzufügen</button>
+    @if (timeslots.length > 0) {
+      <ul class="mt-4 w-full text-sm list-disc list-inside text-accent">
+        @for (slot of timeslots; track slot) {
+          <li class="flex justify-between items-center">
+        <span class="m-1">
+          {{ slot.start_time | date: 'short' }} – {{ slot.end_time | date: 'short' }}
+        </span>
+            <button type="button" class="btn btn-dash btn-xs btn-circle btn-outline"
+                    (click)="removeTimeslot(slot)">x</button>
+          </li>
+        }
+      </ul>
+    }
+    @if (errors['timeslot']) {
+      <p class="text-red-500 text-sm mt-2">{{ errors['timeslot'] }}</p>
+    }
+
+    <textarea class="textarea mt-3" formControlName="comment"></textarea>
+    <p class="label">Kommentar (optional)</p>
 
     <div class="flex justify-between mt-4">
-      <button type="submit" class="btn btn-primary btn-outline">Termin erstellen</button>
+      <button type="button" class="btn btn-primary btn-outline" (click)="submitForm()">Termin erstellen</button>
       <button type="button" class="btn btn-secondary btn-outline" (click)="cancel()">Verwerfen</button>
     </div>
 

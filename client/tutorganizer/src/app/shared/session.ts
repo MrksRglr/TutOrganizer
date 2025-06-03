@@ -8,11 +8,11 @@ export class Session {
     public id: number,
     public offer: Offer,
     public inquiry: Inquiry,
-    public proposed_by: User,
+    public proposed_by: number,
     public status: string,
     public timeslots: Timeslot[],
     public successfully_completed: boolean,
-    public accepted_by?: User,
+    public accepted_by?: number,
     public comment?: string
   )
   {}

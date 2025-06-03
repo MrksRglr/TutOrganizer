@@ -3,6 +3,7 @@ import { Session } from '../shared/session';
 import { TutOrganizerService } from '../shared/tut-organizer.service';
 import { AuthenticationService } from '../shared/authentification.service';
 import { SessionItemComponent } from '../session-item/session-item.component';
+import {filter} from 'rxjs';
 
 @Component({
   selector: 'bs-session-list',
@@ -12,6 +13,7 @@ import { SessionItemComponent } from '../session-item/session-item.component';
   styles: ``
 })
 export class SessionListComponent implements OnInit {
+
   sessions = signal<Session[]>([]);
   filteredSessions = signal<Session[]>([]);
 
@@ -24,12 +26,20 @@ export class SessionListComponent implements OnInit {
 
     this.ts.getAllSessions().subscribe((allSessions) => {
       this.sessions.set(allSessions);
+      console.log(this.sessions());
+      console.log('Aktueller User:', currentUserId, 'Rolle:', role);
+      for (const s of allSessions) {
+        console.log('Session:', s.id,
+          'Tutor-ID:', s.offer?.user.id,
+          'Student-ID:', s.inquiry?.user.id
+        );
+      }
 
       const filtered = allSessions.filter(session => {
         if (role === 'tutor') {
-          return session.proposed_by.id === currentUserId;
+          return session.offer?.user.id === currentUserId;
         } else if (role === 'student') {
-          return session.inquiry.user.id === currentUserId;
+          return session.inquiry?.user.id === currentUserId;
         }
         return false;
       });
@@ -38,7 +48,5 @@ export class SessionListComponent implements OnInit {
     });
   }
 
-  isTutor(): boolean {
-    return this.authService.user()?.role === 'tutor';
-  }
+  // protected readonly filter = filter;
 }
