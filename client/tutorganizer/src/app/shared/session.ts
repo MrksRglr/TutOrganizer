@@ -1,7 +1,6 @@
 import {Timeslot} from './timeslot';
 import {Offer} from './offer';
 import {Inquiry} from './inquiry';
-import {User} from './user';
 
 export class Session {
   constructor(

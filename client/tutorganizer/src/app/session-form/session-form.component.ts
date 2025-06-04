@@ -6,12 +6,13 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {TutOrganizerService} from '../shared/tut-organizer.service';
 import {ToastrService} from 'ngx-toastr';
 import {DatePipe, formatDate} from '@angular/common';
+import {CreateInquiryDto} from '../shared/dto/create-inquiry.dto';
 
 @Component({
   selector: 'bs-session-form',
   imports: [
     ReactiveFormsModule,
-    DatePipe
+    DatePipe // Wird zur Formatierung von Datumswerten benötigt
   ],
   templateUrl: './session-form.component.html',
   styles: ``
@@ -27,7 +28,7 @@ export class SessionFormComponent implements OnInit {
   sessionForm!: FormGroup;
   inquiry?: Inquiry;
   timeslots: Timeslot[] = [];
-  errors: { [key: string]: string } = {};
+  errors: { [key: string]: string } = {}; // Clientseitige Validierungsfehler
 
   ngOnInit() {
 
@@ -45,6 +46,11 @@ export class SessionFormComponent implements OnInit {
     });
   }
 
+  /*
+   Fügt einen Terminvorschlag hinzu, wenn gültig.
+   Validierung: max. 3 Slots, Pflichtfelder gesetzt, gültiges Datum/Zeit
+   Der neue Timeslot wird direkt dem `timeslots`-Array hinzugefügt.
+  */
   addTimeslot() {
     if (this.timeslots.length >= 3) {
       this.errors['timeslot'] = 'Maximal 3 Terminvorschläge erlaubt.';
@@ -85,12 +91,10 @@ export class SessionFormComponent implements OnInit {
       this.toastr.error('Anfrage nicht geladen.', 'TutOrganizer');
       return;
     }
-
     if (!this.inquiry.offer) {
       this.toastr.error('Ungültige Anfrage: Angebot fehlt.', 'TutOrganizer');
       return;
     }
-
     if (this.timeslots.length === 0) {
       this.errors['timeslot'] = 'Bitte mindestens einen Terminvorschlag hinzufügen.';
       return;
@@ -104,13 +108,22 @@ export class SessionFormComponent implements OnInit {
       timeslots: this.timeslots.map(ts => ({
         start_time: formatDate(ts.start_time, 'yyyy-MM-dd HH:mm:ss', 'en'),
         end_time: formatDate(ts.end_time, 'yyyy-MM-dd HH:mm:ss', 'en'),
-      }))
+      })),
     };
 
     this.ts.createSession(sessionData).subscribe({
       next: () => {
-        this.toastr.success('Session erfolgreich erstellt.', 'TutOrganizer');
-        this.router.navigate(['/sessions']);
+        const updatedInquiry: CreateInquiryDto = {
+          user_id: this.inquiry!.user.id,
+          offer_id: this.inquiry!.offer.id,
+          status: 'accepted'
+        }
+        this.ts.updateInquiry(this.inquiry!.id, updatedInquiry).subscribe({
+          next: () => {
+            this.toastr.success('Session erstellt & Anfrage angenommen.', 'TutOrganizer');
+            this.router.navigate(['/sessions']);
+          }
+        });
       },
       error: () => {
         this.toastr.error('Fehler beim Erstellen der Session.', 'TutOrganizer');
@@ -124,6 +137,7 @@ export class SessionFormComponent implements OnInit {
     this.router.navigate(['/inquiries']);
   }
 
+  // Entfernt einen einzelnen Timeslot aus der Liste.
   removeTimeslot(slotToRemove: Timeslot) {
     this.timeslots = this.timeslots.filter(slot => slot !== slotToRemove);
   }

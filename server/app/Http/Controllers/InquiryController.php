@@ -36,7 +36,7 @@ class InquiryController extends Controller
     public function updateInquiry(Request $request, int $id) : JsonResponse {
         DB::beginTransaction();
         try {
-            $inquiry = Inquiry::where('id', $id)->select('course_id', 'user_id')->first();
+            $inquiry = Inquiry::where('id', $id)->first();
             if ($inquiry != null) {
                 $inquiry->update($request->all());
                 $inquiry->save();

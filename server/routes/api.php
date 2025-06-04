@@ -28,10 +28,12 @@ Route::post('/auth/login', [AuthController::class, 'login']);
 Route::post('/auth/logout', [AuthController::class, 'logout']);
 
 Route::get('/courses', [CourseController::class, 'index']);
+/* Im Frontend nicht genutzt
 Route::get('/courses/{code}', [CourseController::class, 'getCourseByCode']);
 Route::post('/courses', [CourseController::class, 'saveCourse']);
 Route::put('/courses/{code}', [CourseController::class, 'updateCourse']);
 Route::delete('/courses/{code}', [CourseController::class, 'deleteCourse']);
+*/
 
 Route::get('/offers', [OfferController::class, 'index']);
 Route::get('/offers/{id}', [OfferController::class, 'getOfferById']);

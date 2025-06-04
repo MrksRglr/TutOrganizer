@@ -6,7 +6,6 @@ import {Course} from './course';
 import {CreateOfferDto} from './dto/create-offer.dto';
 import {CreateInquiryDto} from './dto/create-inquiry.dto';
 import {Inquiry} from './inquiry';
-import {Timeslot} from './timeslot';
 import {Session} from './session';
 
 @Injectable({
@@ -26,11 +25,6 @@ export class TutOrganizerService {
     return this.http.get<Course[]>(`${this.api}/courses`)
     .pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
-
-  getOfferById(id: number): Observable<Offer> {
-      return this.http.get<Offer>(`${this.api}/offers/${id}`)
-        .pipe(retry(3)).pipe(catchError(this.errorHandler));
-    }
 
   createOffer(offer: CreateOfferDto): Observable<any> {
     return this.http.post<Offer>(`${this.api}/offers`, offer)
@@ -61,8 +55,9 @@ export class TutOrganizerService {
       .pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
-  private errorHandler(error: Error | any): Observable<any> {
-    return throwError(error);
+  updateInquiry(id: number, inquiry: CreateInquiryDto): Observable<any> {
+    return this.http.put(`${this.api}/inquiries/${id}`, inquiry)
+      .pipe(retry(3)).pipe(catchError(this.errorHandler));
   }
 
   removeInquiry(id: number) {
@@ -87,6 +82,10 @@ export class TutOrganizerService {
 
   editSession(id: number, session: Session): Observable<any> {
     return this.http.put(`${this.api}/sessions/${id}`, session)
+  }
+
+  private errorHandler(error: Error | any): Observable<any> {
+    return throwError(error);
   }
 
 }

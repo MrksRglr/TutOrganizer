@@ -20,18 +20,27 @@ export class OfferDetailsComponent {
   toastr = inject(ToastrService);
   authService = inject(AuthenticationService);
 
+  // Zustand: aktuelles Angebot (Signal kann reaktiv verändert werden)
   offer = signal<Offer | undefined>(undefined);
+
   userRole = computed(() => this.authService.user()?.role);
   isLoggedIn = this.authService.isLoggedIn;
   isTutor: Signal<boolean> = computed(() => this.userRole() === 'tutor');
   isStudent: Signal<boolean> = computed(() => this.userRole() === 'student');
 
+  // Prüft, ob das Angebot vom aktuell eingeloggten Nutzer stammt
+  isOwnOffer = computed(() => this.offer()?.user?.id === this.authService.getCurrentUserId()
+  );
+
   isEditing = false;
+
+  // Formularsteuerung zur Bearbeitung der Beschreibung
   editOfferControl = new FormControl('');
 
   @ViewChild('modalRef') modalRef!: ElementRef<HTMLDialogElement>;
   @ViewChild('tutorModalRef') tutorModalRef!: ElementRef<HTMLDialogElement>;
 
+  // Öffnet Modal für Anfrageerstellung
   open() {
     this.modalRef.nativeElement.showModal();
   }
@@ -69,9 +78,10 @@ export class OfferDetailsComponent {
   saveEdit() {
     if (this.offer()) {
       const updatedDescription = this.editOfferControl.value;
+      // Validierung
       if (updatedDescription !== null && updatedDescription !== undefined) {
         const updatedOffer = {...this.offer()!, description: updatedDescription};
-        this.offer.set(updatedOffer);
+        this.offer.set(updatedOffer); // lokale Aktualisierung
         this.ts.editOffer(updatedOffer.id, updatedOffer).subscribe({
           next: (res) => {this.isEditing = false;},
           error: (err) => {this.toastr.error
@@ -84,7 +94,7 @@ export class OfferDetailsComponent {
   createInquiry() {
     const inquiryData = {
       user_id: this.authService.getCurrentUserId(),
-      offer_id: this.offer()!.id
+      offer_id: this.offer()!.id,
     }
     this.ts.createInquiry(inquiryData).subscribe({
       next: () => {this.toastr.success('Anfrage wurde gesendet.', 'TutOrganizer');},

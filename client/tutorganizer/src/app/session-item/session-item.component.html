@@ -1,5 +1,6 @@
-@let s = session()!;
-<div class="card bg-teal-100 text-primary-content w-96">
+@let s = localSession()!;
+<div class="card bg-emerald-100 text-primary-content w-96"
+     [ngClass]="{ 'opacity-50': s.successfully_completed}">
   <div class="card-body">
     <p class="absolute left-2 top-2">#{{s.id}}</p>
     <h2 class="card-title">[{{ s.offer.course.code }}] {{ s.offer.course.name }}</h2>
@@ -10,10 +11,20 @@
       <button class="btn opacity-80 btn-active btn-neutral">{{ s.inquiry.user.name }}</button>
     </p>
     <p class="font-semibold">Status:
-      <button class="btn opacity-80 btn-active btn-neutral">{{  s.status }}</button>
+      <button class="btn opacity-80 btn-active btn-neutral"
+              [class.text-error]="s.status === 'rejected'"
+              [class.text-success]="s.status === 'accepted'"
+      >{{  s.status }}</button>
     </p>
     <p class="font-semibold">Erfolgreich durchgeführt:
-      <input type="checkbox" [checked]="s.successfully_completed" disabled />
+      @if (isTutor()) {
+        <input type="checkbox" [checked]="s.successfully_completed" (change)="sessionCompleted()"
+               class="checkbox checkbox-lg checkbox-accent border-stone-500 bg-stone-500"/>
+      }
+      @if (isStudent()) {
+        <input type="checkbox" [checked]="s.successfully_completed" (change)="sessionCompleted()"
+               class="checkbox checkbox-lg checkbox-accent border-stone-300 bg-stone-200" disabled/>
+      }
     </p>
     <div class="mt-3">
       <p class="font-semibold">Timeslots:</p>
@@ -26,30 +37,58 @@
       </ul>
     </div>
     @if (s && isEditing) {
-      <textarea
-        [formControl]="editSessionControl"
-        class="textarea textarea-bordered w-full"
-        rows="5">
-        </textarea>
-      <div class="flex gap-2 mt-2">
-        <button class="btn btn-primary btn-outline" (click)="saveEdit()">Speichern</button>
-        <button class="btn btn-secondary btn-outline" (click)="cancelEdit()">Verwerfen</button>
+      <div class="space-y-4">
+        <div class="form-control">
+          <textarea
+            [formControl]="editTimeslotsControl"
+            class="textarea textarea-bordered w-full text-white"
+            rows="5"
+            placeholder="Beispiel: 2025-06-10T14:00 – 2025-06-10T15:00"></textarea>
+        </div>
+
+        <div class="form-control">
+          <label class="label">
+            <span class="label-text font-semibold">Kommentar</span>
+          </label>
+          <textarea
+            [formControl]="editCommentControl"
+            class="textarea textarea-bordered w-full text-white" rows="3">
+          </textarea>
+        </div>
+
+        <div class="flex gap-2 mt-2">
+          <button class="btn btn-primary btn-outline" (click)="saveEdit()">Speichern</button>
+          <button class="btn btn-secondary btn-outline" (click)="cancelEdit()">Verwerfen</button>
+        </div>
       </div>
     } @else {
       <p class="py-4">{{ s.comment }}</p>
 
       @if (s && !isEditing) {
         <div class="modal-action">
-          <button class="btn btn-warning btn-outline" (click)="startEdit()">bearbeiten</button>
-          @if (isTutor()) {
-            <button class="btn btn-error btn-outline" (click)="removeSession()">löschen</button>
-          }
+          <button class="btn btn-warning btn-soft"
+                  (click)="startEdit()"
+                  [disabled]="s.successfully_completed ||
+                   isStudent() && s.status !== 'proposed' ||
+                   isTutor() && s.status === 'accepted'">
+            bearbeiten</button>
+            <button class="btn btn-error btn-soft"
+                    (click)="removeSession()">löschen</button>
 
-          @if (isStudent()) {
-            <button class="btn btn-success btn-sm" (click)="acceptSession()">Termin bestätigen</button>
-            <button class="btn btn-error btn-sm" (click)="rejectSession()">Ablehnen</button>
+          @if (isStudent() && s.status !== 'accepted') {
+            <button class="btn btn-success btn-soft"
+                    (click)="acceptSession()"
+                    [disabled]="s.successfully_completed">Termin bestätigen</button>
+          } @else if (isStudent() && s.status === 'accepted') {
+            <button class="btn btn-success btn-soft" disabled>Termin fixiert</button>
           }
-        </div>}
+          @if (isStudent() && s.status !== 'rejected') {
+            <button class="btn btn-error btn-soft"
+                    (click)="rejectSession()"
+                    [disabled]="s.successfully_completed">Ablehnen</button>
+          }
+        </div>
+      }
     }
   </div>
 </div>

@@ -47,7 +47,7 @@ export class OfferFormComponent implements OnInit {
 
   submitForm() {
     if(this.offerForm.valid) {
-      const offer: CreateOfferDto = {
+      const offer: CreateOfferDto = { // Data Transfer Object um type errors beim API-request zu vermeiden
         course_id: this.offerForm.value.course,
         user_id: this.authService.getCurrentUserId(),
         description: this.offerForm.value.description

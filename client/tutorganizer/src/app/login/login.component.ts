@@ -4,18 +4,21 @@ import {ToastrService} from 'ngx-toastr';
 import {Router} from '@angular/router';
 import {AuthenticationService} from '../shared/authentification.service';
 
+// Interface zur Typdefinition der Login-Response
 interface Response {
   access_token: string;
 }
 @Component({
   selector: 'bs-login',
   imports: [
-    ReactiveFormsModule
+    ReactiveFormsModule // Modul für reaktive Formulare (FormGroup, FormBuilder, etc.)
   ],
   templateUrl: './login.component.html',
   styles: ``
 })
 export class LoginComponent implements OnInit {
+
+  // Das Login-Formular mit den Feldern „username“ und „password“
   loginForm: FormGroup;
 
   constructor(private fb: FormBuilder,
@@ -25,6 +28,7 @@ export class LoginComponent implements OnInit {
     this.loginForm = this.fb.group({});
   }
 
+  // Lifecycle-Hook: Initialisiert das Formular mit Validierungsvorgaben
   ngOnInit() {
     this.loginForm = this.fb.group({
       username: ['',[Validators.required, Validators.email]],
@@ -32,12 +36,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  // Wird beim Absenden des Login-Formulars aufgerufen.
   login() {
     const val = this.loginForm.value;
     this.authService.login(val.username, val.password).subscribe({
       next: (res) => {
         console.log(res);
-        this.authService.setSessionStorage(res.access_token, res.user);
+        this.authService.setSessionStorage(res.access_token, res.user); // Token & Benutzer speichern
         this.router.navigate(['/']);
       },
       error: () => {

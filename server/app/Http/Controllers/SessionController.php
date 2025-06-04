@@ -11,7 +11,11 @@ class SessionController extends Controller
 {
 
     public function index() : JsonResponse {
-        $sessions = Session::with('timeslots', 'offer.user', 'inquiry.user')->get();
+        $sessions = Session::with(
+            'timeslots',
+            'offer.user',
+            'offer.course',
+            'inquiry.user')->get();
         return response()->json($sessions, 200);
     }
 

@@ -26,15 +26,10 @@ export class SessionListComponent implements OnInit {
 
     this.ts.getAllSessions().subscribe((allSessions) => {
       this.sessions.set(allSessions);
-      console.log(this.sessions());
-      console.log('Aktueller User:', currentUserId, 'Rolle:', role);
-      for (const s of allSessions) {
-        console.log('Session:', s.id,
-          'Tutor-ID:', s.offer?.user.id,
-          'Student-ID:', s.inquiry?.user.id
-        );
-      }
 
+      // Filterfunktion nach User-Rolle
+      // Tutor: Nur Anfragen auf selbst erstellte Angebote sollen angezeigt werden
+      // Student: Nur selbst erstellte Anfragen sollen angezeigt werden.
       const filtered = allSessions.filter(session => {
         if (role === 'tutor') {
           return session.offer?.user.id === currentUserId;
@@ -48,5 +43,4 @@ export class SessionListComponent implements OnInit {
     });
   }
 
-  // protected readonly filter = filter;
 }

@@ -12,9 +12,9 @@
     </p>
 
     <div class="card-actions justify-end">
-      <button class="btn btn-error" (click)="removeInquiry()">Anfrage löschen</button>
+      <button class="btn btn-error btn-soft" (click)="removeInquiry()">Anfrage löschen</button>
       @if(authService.isLoggedIn() && isTutor()) {
-      <a class="btn btn-soft" routerLink="/sessions/new_session_form"
+      <a class="btn btn-soft btn-success" routerLink="/sessions/new_session_form"
          [queryParams]="{ inquiryId: i.id }">Termin(e) anbieten</a>
       }
     </div>
