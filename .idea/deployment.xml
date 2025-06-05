@@ -6,7 +6,7 @@
       <paths name="HETZNER_RIEGLER">
         <serverdata>
           <mappings>
-            <mapping deploy="/" local="$PROJECT_DIR$/server" web="/" />
+            <mapping deploy="/public_html/angular_tutorganizer" local="$PROJECT_DIR$/server" web="/tutorganizerapp.s2210456031.student.kwmhgb.at/" />
           </mappings>
         </serverdata>
       </paths>
